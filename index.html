@@ -1,0 +1,760 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Reny Paes // Estratégia & Conteúdo Digital</title>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;0,900;1,700&family=Outfit:wght@300;400;500;600&display=swap" rel="stylesheet"/>
+  <style>
+    :root {
+      --ink: #0C0618;
+      --deep: #130A24;
+      --plum: #3D1060;
+      --violet: #7C3AED;
+      --lavender: #A78BFA;
+      --soft: #EDE9FE;
+      --muted: #9B8BAE;
+      --white: #FAF8FF;
+      --green: #22C55E;
+    }
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+    body { font-family: 'Outfit', sans-serif; background: var(--ink); color: var(--white); overflow-x: hidden; }
+
+    /* ─── NOISE OVERLAY ─── */
+    body::before {
+      content: ''; position: fixed; inset: 0; z-index: 0; pointer-events: none;
+      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.04'/%3E%3C/svg%3E");
+      opacity: .5;
+    }
+
+    /* ─── NAV ─── */
+    nav {
+      position: fixed; top: 0; left: 0; right: 0; z-index: 200;
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 1.1rem 6vw;
+      background: rgba(12,6,24,0.85); backdrop-filter: blur(20px);
+      border-bottom: 1px solid rgba(124,58,237,0.12);
+    }
+    .logo {
+      font-family: 'Playfair Display', serif; font-size: 1.1rem; font-weight: 700;
+      color: var(--white); letter-spacing: .02em; text-decoration: none;
+    }
+    .logo span { color: var(--lavender); font-style: italic; }
+    .nav-links { display: flex; align-items: center; gap: 2.2rem; list-style: none; }
+    .nav-links a { font-size: .85rem; color: var(--muted); text-decoration: none; letter-spacing: .04em; transition: color .2s; }
+    .nav-links a:hover { color: var(--white); }
+    .nav-pill {
+      background: var(--violet); color: #fff; padding: .5rem 1.4rem;
+      border-radius: 100px; font-size: .85rem; font-weight: 500;
+      text-decoration: none; transition: background .2s, transform .2s;
+    }
+    .nav-pill:hover { background: var(--lavender); color: var(--ink); transform: translateY(-1px); }
+    .nav-toggle { display: none; flex-direction: column; gap: 5px; cursor: pointer; background: none; border: none; padding: 4px; }
+    .nav-toggle span { display: block; width: 24px; height: 2px; background: var(--white); border-radius: 2px; transition: all .3s; }
+
+    /* ─── HERO ─── */
+    #hero {
+      min-height: 100vh; display: grid; grid-template-columns: 1fr 1fr;
+      align-items: center; gap: 4rem; padding: 9rem 6vw 5rem;
+      position: relative; overflow: hidden;
+    }
+    .hero-glow {
+      position: absolute; inset: 0; z-index: 0; pointer-events: none;
+      background:
+        radial-gradient(ellipse 55% 60% at 75% 45%, rgba(124,58,237,.28) 0%, transparent 65%),
+        radial-gradient(ellipse 35% 40% at 15% 75%, rgba(167,139,250,.1) 0%, transparent 55%);
+    }
+    .hero-text { position: relative; z-index: 1; }
+    .eyebrow {
+      display: inline-flex; align-items: center; gap: .5rem;
+      background: rgba(124,58,237,.15); border: 1px solid rgba(167,139,250,.3);
+      color: var(--lavender); font-size: .75rem; letter-spacing: .14em;
+      padding: .4rem 1rem; border-radius: 100px; margin-bottom: 2rem;
+      text-transform: uppercase; animation: up .7s ease both;
+    }
+    .eyebrow::before { content: '✦'; font-size: .6rem; }
+    h1 {
+      font-family: 'Playfair Display', serif;
+      font-size: clamp(2.8rem, 4.5vw, 4.2rem); line-height: 1.08; font-weight: 900;
+      margin-bottom: 1.6rem; animation: up .7s .1s ease both;
+    }
+    h1 em { font-style: italic; color: var(--lavender); display: block; }
+    .hero-desc {
+      font-size: 1.05rem; color: var(--muted); line-height: 1.8; font-weight: 300;
+      max-width: 480px; margin-bottom: 2.8rem; animation: up .7s .2s ease both;
+    }
+    .hero-ctas { display: flex; gap: 1rem; flex-wrap: wrap; animation: up .7s .3s ease both; }
+    .btn-main {
+      display: inline-flex; align-items: center; gap: .5rem;
+      background: var(--violet); color: #fff; font-weight: 500;
+      padding: .9rem 2rem; border-radius: 100px; text-decoration: none;
+      box-shadow: 0 0 40px rgba(124,58,237,.45); transition: all .25s;
+    }
+    .btn-main:hover { transform: translateY(-2px); box-shadow: 0 0 60px rgba(124,58,237,.65); }
+    .btn-outline {
+      display: inline-flex; align-items: center; gap: .5rem;
+      border: 1px solid rgba(167,139,250,.4); color: var(--white);
+      padding: .9rem 2rem; border-radius: 100px; text-decoration: none;
+      transition: all .25s; font-weight: 400;
+    }
+    .btn-outline:hover { border-color: var(--lavender); background: rgba(167,139,250,.08); }
+    .hero-visual {
+      position: relative; z-index: 1;
+      display: flex; align-items: center; justify-content: center;
+      animation: up .7s .15s ease both;
+    }
+    .hero-card {
+      background: rgba(61,16,96,.25); border: 1px solid rgba(124,58,237,.25);
+      border-radius: 24px; padding: 2.5rem; width: 100%; max-width: 420px;
+      backdrop-filter: blur(12px);
+    }
+    .hero-card-tag {
+      font-size: .72rem; letter-spacing: .12em; text-transform: uppercase;
+      color: var(--lavender); margin-bottom: 1.2rem;
+    }
+    .metric-row { display: flex; gap: 1.5rem; margin-bottom: 1.5rem; }
+    .metric-box {
+      flex: 1; background: rgba(124,58,237,.15);
+      border: 1px solid rgba(124,58,237,.2); border-radius: 14px;
+      padding: 1.1rem; text-align: center;
+    }
+    .metric-box .val {
+      font-family: 'Playfair Display', serif; font-size: 1.8rem; font-weight: 700;
+      color: var(--lavender); display: block;
+    }
+    .metric-box .lbl { font-size: .78rem; color: var(--muted); margin-top: .2rem; }
+    .compare-row {
+      display: grid; grid-template-columns: 1fr 1fr; gap: .8rem;
+    }
+    .compare-item {
+      background: rgba(255,255,255,.03); border-radius: 12px; padding: .9rem;
+    }
+    .compare-item .ci-label { font-size: .7rem; color: var(--muted); margin-bottom: .3rem; }
+    .compare-item .ci-val { font-size: .95rem; font-weight: 600; }
+    .ci-bad { color: #F87171; }
+    .ci-good { color: var(--green); }
+
+    /* ─── SECTION BASE ─── */
+    section { position: relative; }
+    .container { max-width: 1160px; margin: 0 auto; padding: 0 6vw; }
+    .s-label { font-size: .72rem; letter-spacing: .16em; text-transform: uppercase; color: var(--lavender); margin-bottom: .7rem; }
+    h2 {
+      font-family: 'Playfair Display', serif;
+      font-size: clamp(2rem, 3.5vw, 2.9rem); font-weight: 900; line-height: 1.15;
+      margin-bottom: 1rem;
+    }
+    .bar { width: 2.5rem; height: 3px; background: var(--violet); border-radius: 2px; margin: 1.2rem 0 2.5rem; }
+
+    /* ─── SOBRE ─── */
+    #sobre { padding: 7rem 0; border-top: 1px solid rgba(124,58,237,.12); }
+    .sobre-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 6rem; align-items: center; }
+    .sobre-text p { color: var(--muted); line-height: 1.85; font-weight: 300; font-size: 1.05rem; margin-bottom: 1rem; }
+    .sobre-text p strong { color: var(--white); font-weight: 500; }
+    .sobre-stats { display: grid; grid-template-columns: 1fr 1fr; gap: 1.2rem; }
+    .s-stat {
+      background: rgba(61,16,96,.2); border: 1px solid rgba(124,58,237,.18);
+      border-radius: 18px; padding: 1.6rem; transition: border-color .25s, transform .25s;
+    }
+    .s-stat:hover { border-color: var(--lavender); transform: translateY(-3px); }
+    .s-stat-val { font-family: 'Playfair Display', serif; font-size: 2rem; font-weight: 700; color: var(--lavender); }
+    .s-stat-lbl { font-size: .82rem; color: var(--muted); margin-top: .3rem; line-height: 1.4; }
+
+    /* ─── PROBLEMA ─── */
+    #problema {
+      padding: 7rem 0;
+      background: linear-gradient(160deg, var(--deep) 0%, var(--plum) 50%, var(--deep) 100%);
+    }
+    .problema-inner { text-align: center; max-width: 720px; margin: 0 auto; }
+    .problema-inner .bar { margin: 1.2rem auto 2.5rem; }
+    .problema-inner p { color: var(--muted); font-size: 1.1rem; line-height: 1.8; font-weight: 300; margin-bottom: 3rem; }
+    .expertise-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1.5rem; }
+    .e-card {
+      background: rgba(12,6,24,.5); border: 1px solid rgba(124,58,237,.2);
+      border-radius: 20px; padding: 2rem 1.6rem; text-align: left;
+      transition: border-color .25s, transform .25s; backdrop-filter: blur(8px);
+    }
+    .e-card:hover { border-color: var(--lavender); transform: translateY(-4px); }
+    .e-icon { font-size: 1.8rem; margin-bottom: 1rem; }
+    .e-card h3 { font-family: 'Playfair Display', serif; font-size: 1.1rem; font-weight: 700; margin-bottom: .6rem; }
+    .e-card p { font-size: .9rem; color: var(--muted); line-height: 1.65; }
+
+    /* ─── SERVIÇOS ─── */
+    #servicos { padding: 7rem 0; border-top: 1px solid rgba(124,58,237,.12); }
+    .servicos-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1.5rem; }
+    .srv-card {
+      background: rgba(61,16,96,.15); border: 1px solid rgba(124,58,237,.18);
+      border-radius: 22px; padding: 2.2rem; display: flex; flex-direction: column;
+      transition: all .3s;
+    }
+    .srv-card:hover { border-color: var(--lavender); transform: translateY(-5px); box-shadow: 0 20px 60px rgba(124,58,237,.15); }
+    .srv-card.featured {
+      background: linear-gradient(145deg, rgba(124,58,237,.25), rgba(61,16,96,.3));
+      border-color: rgba(124,58,237,.5);
+    }
+    .srv-badge {
+      display: inline-block; background: var(--violet); color: #fff;
+      font-size: .7rem; letter-spacing: .1em; text-transform: uppercase;
+      padding: .3rem .9rem; border-radius: 100px; margin-bottom: 1.5rem; align-self: flex-start;
+    }
+    .srv-card h3 { font-family: 'Playfair Display', serif; font-size: 1.35rem; font-weight: 700; margin-bottom: .5rem; }
+    .srv-card .srv-desc { font-size: .88rem; color: var(--muted); line-height: 1.6; margin-bottom: 1.5rem; }
+    .srv-features { list-style: none; flex: 1; margin-bottom: 2rem; }
+    .srv-features li {
+      font-size: .88rem; color: var(--muted); padding: .55rem 0;
+      border-bottom: 1px solid rgba(124,58,237,.08); display: flex; align-items: flex-start; gap: .6rem;
+      line-height: 1.5;
+    }
+    .srv-features li:last-child { border-bottom: none; }
+    .srv-features li::before { content: '✦'; color: var(--lavender); font-size: .65rem; margin-top: .2rem; flex-shrink: 0; }
+    .srv-features li.no { opacity: .45; }
+    .srv-features li.no::before { content: '✕'; color: var(--muted); }
+    .srv-cta {
+      display: block; text-align: center; background: rgba(124,58,237,.2);
+      border: 1px solid rgba(124,58,237,.4); color: var(--white);
+      padding: .85rem; border-radius: 12px; text-decoration: none;
+      font-weight: 500; font-size: .9rem; transition: all .25s;
+    }
+    .srv-cta:hover { background: var(--violet); border-color: var(--violet); }
+    .srv-card.featured .srv-cta { background: var(--violet); border-color: var(--violet); }
+    .srv-card.featured .srv-cta:hover { background: var(--lavender); color: var(--ink); }
+    .srv-note { text-align: center; margin-top: 2rem; font-size: .85rem; color: var(--muted); }
+    .srv-note strong { color: var(--lavender); }
+
+    /* ─── PROCESSO ─── */
+    #processo { padding: 7rem 0; background: rgba(19,10,36,.6); }
+    .processo-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1.5rem; margin-top: .5rem; }
+    .proc-card {
+      background: rgba(12,6,24,.5); border: 1px solid rgba(124,58,237,.12);
+      border-radius: 18px; padding: 2rem; position: relative; transition: border-color .25s;
+    }
+    .proc-card:hover { border-color: rgba(124,58,237,.4); }
+    .proc-num {
+      font-family: 'Playfair Display', serif; font-size: 3.5rem; font-weight: 900;
+      color: rgba(124,58,237,.18); line-height: 1; margin-bottom: .5rem;
+    }
+    .proc-card h3 { font-size: 1rem; font-weight: 600; margin-bottom: .5rem; }
+    .proc-card p { font-size: .87rem; color: var(--muted); line-height: 1.65; }
+
+    /* ─── RESULTADOS ─── */
+    #resultados { padding: 7rem 0; border-top: 1px solid rgba(124,58,237,.12); }
+    .res-intro { max-width: 640px; }
+    .res-intro p { color: var(--muted); font-size: 1rem; line-height: 1.75; margin-bottom: 3rem; font-weight: 300; }
+    .metrics-strip {
+      display: grid; grid-template-columns: repeat(4, 1fr); gap: 1rem;
+      background: linear-gradient(135deg, rgba(61,16,96,.3), rgba(124,58,237,.12));
+      border: 1px solid rgba(124,58,237,.2); border-radius: 20px; padding: 2rem;
+      margin-bottom: 3rem;
+    }
+    .ms-item { text-align: center; }
+    .ms-val { font-family: 'Playfair Display', serif; font-size: 2rem; font-weight: 900; color: var(--lavender); display: block; }
+    .ms-lbl { font-size: .78rem; color: var(--muted); margin-top: .3rem; line-height: 1.4; }
+    .clientes-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1.5rem; margin-bottom: 3rem; }
+    .cli-card {
+      background: rgba(61,16,96,.15); border: 1px solid rgba(124,58,237,.15);
+      border-radius: 18px; padding: 1.8rem; transition: border-color .25s;
+    }
+    .cli-card:hover { border-color: var(--lavender); }
+    .cli-card h3 { font-family: 'Playfair Display', serif; font-size: 1.1rem; font-weight: 700; color: var(--lavender); margin-bottom: 1rem; }
+    .cli-card ul { list-style: none; }
+    .cli-card li { font-size: .87rem; color: var(--muted); padding: .4rem 0; border-bottom: 1px solid rgba(124,58,237,.07); line-height: 1.5; }
+    .cli-card li:last-child { border-bottom: none; }
+    .cli-card li::before { content: '→ '; color: var(--lavender); font-size: .8rem; }
+    /* comparison block */
+    .compare-block {
+      background: rgba(19,10,36,.8); border: 1px solid rgba(124,58,237,.2);
+      border-radius: 20px; padding: 2.5rem;
+    }
+    .compare-block h3 { font-family: 'Playfair Display', serif; font-size: 1.3rem; margin-bottom: 2rem; text-align: center; }
+    .compare-cols { display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem; }
+    .comp-col { background: rgba(255,255,255,.03); border-radius: 14px; padding: 1.5rem; }
+    .comp-col-title { font-size: .72rem; letter-spacing: .12em; text-transform: uppercase; margin-bottom: 1.2rem; }
+    .comp-col-title.bad { color: #F87171; }
+    .comp-col-title.good { color: var(--green); }
+    .comp-row { display: flex; justify-content: space-between; align-items: center; padding: .6rem 0; border-bottom: 1px solid rgba(255,255,255,.04); font-size: .87rem; }
+    .comp-row:last-child { border-bottom: none; }
+    .comp-row .label { color: var(--muted); }
+    .comp-row .value.bad { color: #F87171; font-weight: 600; }
+    .comp-row .value.good { color: var(--green); font-weight: 600; }
+
+    /* ─── FAQ ─── */
+    #faq { padding: 7rem 0; background: rgba(19,10,36,.5); }
+    .faq-inner { max-width: 760px; margin: 0 auto; }
+    .faq-inner .bar { margin: 1.2rem 0 2.5rem; }
+    .faq-item {
+      border-bottom: 1px solid rgba(124,58,237,.15); overflow: hidden;
+    }
+    .faq-q {
+      width: 100%; background: none; border: none; color: var(--white);
+      font-family: 'Outfit', sans-serif; font-size: 1rem; font-weight: 500;
+      text-align: left; padding: 1.4rem 0; cursor: pointer;
+      display: flex; justify-content: space-between; align-items: center; gap: 1rem;
+      transition: color .2s;
+    }
+    .faq-q:hover { color: var(--lavender); }
+    .faq-icon { font-size: 1.2rem; color: var(--lavender); flex-shrink: 0; transition: transform .3s; }
+    .faq-item.open .faq-icon { transform: rotate(45deg); }
+    .faq-a { max-height: 0; overflow: hidden; transition: max-height .4s ease, padding .3s; }
+    .faq-item.open .faq-a { max-height: 300px; }
+    .faq-a p { color: var(--muted); font-size: .93rem; line-height: 1.8; padding-bottom: 1.4rem; font-weight: 300; }
+    .faq-edit-note {
+      margin-top: 2.5rem; background: rgba(124,58,237,.1); border: 1px dashed rgba(124,58,237,.3);
+      border-radius: 12px; padding: 1.2rem 1.5rem;
+      font-size: .82rem; color: var(--muted); line-height: 1.6;
+    }
+    .faq-edit-note strong { color: var(--lavender); }
+
+    /* ─── CTA FINAL ─── */
+    #cta-final {
+      padding: 8rem 0;
+      background: radial-gradient(ellipse 80% 80% at 50% 50%, rgba(124,58,237,.2) 0%, transparent 70%);
+      text-align: center;
+    }
+    #cta-final h2 { max-width: 680px; margin: 0 auto 1.2rem; }
+    #cta-final p { color: var(--muted); font-size: 1.05rem; max-width: 480px; margin: 0 auto 3rem; line-height: 1.7; font-weight: 300; }
+    .cta-group { display: flex; justify-content: center; gap: 1rem; flex-wrap: wrap; }
+    .btn-wa {
+      display: inline-flex; align-items: center; gap: .6rem;
+      background: #25D366; color: #fff; font-weight: 600;
+      padding: 1rem 2.2rem; border-radius: 100px; text-decoration: none;
+      box-shadow: 0 0 40px rgba(37,211,102,.35); transition: all .25s;
+    }
+    .btn-wa:hover { transform: translateY(-2px); box-shadow: 0 0 60px rgba(37,211,102,.5); }
+
+    /* ─── FOOTER ─── */
+    footer {
+      padding: 2rem 6vw; border-top: 1px solid rgba(124,58,237,.1);
+      display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 1rem;
+    }
+    footer p { font-size: .82rem; color: rgba(155,139,174,.5); }
+    footer a { color: var(--lavender); text-decoration: none; font-size: .82rem; }
+
+    /* ─── WHATSAPP FLOAT ─── */
+    .wa-float {
+      position: fixed; bottom: 2rem; right: 2rem; z-index: 300;
+      width: 56px; height: 56px; border-radius: 50%;
+      background: #25D366; display: flex; align-items: center; justify-content: center;
+      box-shadow: 0 8px 30px rgba(37,211,102,.4); text-decoration: none;
+      transition: transform .25s, box-shadow .25s;
+      animation: pulse-wa 2.5s ease infinite;
+    }
+    .wa-float:hover { transform: scale(1.12); box-shadow: 0 12px 45px rgba(37,211,102,.6); }
+    @keyframes pulse-wa {
+      0%, 100% { box-shadow: 0 8px 30px rgba(37,211,102,.4); }
+      50% { box-shadow: 0 8px 50px rgba(37,211,102,.7); }
+    }
+
+    /* ─── REVEAL ─── */
+    .reveal { opacity: 0; transform: translateY(28px); transition: opacity .65s ease, transform .65s ease; }
+    .reveal.visible { opacity: 1; transform: none; }
+
+    /* ─── ANIMATIONS ─── */
+    @keyframes up {
+      from { opacity: 0; transform: translateY(22px); }
+      to   { opacity: 1; transform: none; }
+    }
+
+    /* ─── RESPONSIVE ─── */
+    @media (max-width: 900px) {
+      #hero { grid-template-columns: 1fr; padding-top: 7rem; }
+      .hero-visual { display: none; }
+      .nav-links { display: none; }
+      .nav-links.open { display: flex; flex-direction: column; position: fixed; top: 60px; left: 0; right: 0; background: rgba(12,6,24,.97); padding: 2rem 6vw; gap: 1.5rem; border-bottom: 1px solid rgba(124,58,237,.15); }
+      .nav-toggle { display: flex; }
+      .sobre-grid, .expertise-grid, .servicos-grid, .processo-grid, .clientes-grid, .compare-cols { grid-template-columns: 1fr; }
+      .metrics-strip { grid-template-columns: 1fr 1fr; }
+      footer { flex-direction: column; text-align: center; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <a href="#" class="logo">Reny Paes <span>// Estratégia</span></a>
+  <ul class="nav-links" id="navLinks">
+    <li><a href="#sobre">Sobre</a></li>
+    <li><a href="#servicos">Serviços</a></li>
+    <li><a href="#resultados">Resultados</a></li>
+    <li><a href="blog.html">Blog</a></li>
+    <li><a href="#cta-final" class="nav-pill">Quero uma proposta</a></li>
+  </ul>
+  <button class="nav-toggle" id="navToggle" aria-label="Menu">
+    <span></span><span></span><span></span>
+  </button>
+</nav>
+
+<!-- HERO -->
+<section id="hero">
+  <div class="hero-glow"></div>
+  <div class="hero-text">
+    <div class="eyebrow">Estratégia & Conteúdo Digital</div>
+    <h1>Conteúdo que constrói <em>autoridade,</em> não só presença.</h1>
+    <p class="hero-desc">Planejamento, narrativa e execução com intenção. Transformo sua presença digital em resultados reais e mensuráveis.</p>
+    <div class="hero-ctas">
+      <a href="https://wa.me/5561982305647" target="_blank" class="btn-main">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347z"/><path d="M12 0C5.373 0 0 5.373 0 12c0 2.123.554 4.118 1.528 5.85L0 24l6.335-1.506A11.955 11.955 0 0012 24c6.627 0 12-5.373 12-12S18.627 0 12 0zm0 22c-1.885 0-3.651-.515-5.17-1.41l-.37-.22-3.763.895.952-3.65-.24-.38A9.945 9.945 0 012 12c0-5.514 4.486-10 10-10s10 4.486 10 10-4.486 10-10 10z"/></svg>
+        Pedir proposta
+      </a>
+      <a href="#resultados" class="btn-outline">Ver resultados reais</a>
+    </div>
+  </div>
+  <div class="hero-visual">
+    <div class="hero-card">
+      <div class="hero-card-tag">✦ Resultado real de cliente</div>
+      <div class="metric-row">
+        <div class="metric-box">
+          <span class="val">+28%</span>
+          <div class="lbl">Visualizações</div>
+        </div>
+        <div class="metric-box">
+          <span class="val">+134%</span>
+          <div class="lbl">Interações</div>
+        </div>
+      </div>
+      <div class="compare-row">
+        <div class="compare-item">
+          <div class="ci-label">Sem estratégia</div>
+          <div class="ci-val ci-bad">R$148,45 / anúncio</div>
+        </div>
+        <div class="compare-item">
+          <div class="ci-label">Com estratégia</div>
+          <div class="ci-val ci-good">R$28,78 / anúncio</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- SOBRE -->
+<section id="sobre">
+  <div class="container">
+    <div class="sobre-grid">
+      <div class="sobre-text reveal">
+        <p class="s-label">Quem sou eu</p>
+        <h2>Reny Paes</h2>
+        <div class="bar"></div>
+        <p>Sou <strong>bacharel em Administração de Empresas pela UNIPLAN</strong> e formada em Social Media Estrategista pela Like Mkt. São 4 anos de mercado, desde quando iniciei minha transição de carreira.</p>
+        <p>Já cuidei de contas nas áreas de <strong>educação e saúde</strong> — e hoje estou aqui para levar o seu negócio para onde ele merece estar no digital.</p>
+        <p>Minha missão é simples: criar conteúdo com <strong>intenção real</strong>, não apenas presença. Cada estratégia é única, construída para o seu contexto e seus objetivos.</p>
+      </div>
+      <div class="sobre-stats reveal">
+        <div class="s-stat">
+          <div class="s-stat-val">4+</div>
+          <div class="s-stat-lbl">Anos de experiência no mercado digital</div>
+        </div>
+        <div class="s-stat">
+          <div class="s-stat-val">+134%</div>
+          <div class="s-stat-lbl">Crescimento de interações para clientes</div>
+        </div>
+        <div class="s-stat">
+          <div class="s-stat-val">+72%</div>
+          <div class="s-stat-lbl">Aumento de alcance orgânico comprovado</div>
+        </div>
+        <div class="s-stat">
+          <div class="s-stat-val">Edu & Saúde</div>
+          <div class="s-stat-lbl">Segmentos com expertise comprovada</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- PROBLEMA -->
+<section id="problema">
+  <div class="container">
+    <div class="problema-inner reveal">
+      <p class="s-label">O problema que resolvo</p>
+      <h2>Sua empresa está no digital — mas não decola?</h2>
+      <div class="bar"></div>
+      <p>Você sabe como quer se posicionar, mas não tem constância para isso e sente que está patinando no mesmo lugar. Ou pior: está gerando conteúdo sem estratégia e não vê resultado nenhum.</p>
+    </div>
+    <div class="expertise-grid reveal">
+      <div class="e-card">
+        <div class="e-icon">🎯</div>
+        <h3>Estratégia Única</h3>
+        <p>Crio e executo sua estratégia de conteúdo personalizada para aumentar sua visibilidade e destacar sua autoridade no mercado.</p>
+      </div>
+      <div class="e-card">
+        <div class="e-icon">📣</div>
+        <h3>Narrativa Digital</h3>
+        <p>Propagamos a sua narrativa no digital, tornando sua marca pessoal o pilar de uma comunidade forte e consistente.</p>
+      </div>
+      <div class="e-card">
+        <div class="e-icon">⚙️</div>
+        <h3>Gestão Completa</h3>
+        <p>Estruturamos e gerenciamos o site e todos os canais digitais necessários à execução do seu projeto com excelência.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- SERVIÇOS -->
+<section id="servicos">
+  <div class="container">
+    <p class="s-label reveal">O que eu ofereço</p>
+    <h2 class="reveal">Serviços</h2>
+    <div class="bar reveal"></div>
+    <div class="servicos-grid reveal">
+
+      <!-- BASIC -->
+      <div class="srv-card">
+        <span class="srv-badge">Plano Basic</span>
+        <h3>Estratégia de Conteúdo</h3>
+        <p class="srv-desc">Para quem quer clareza e direção antes de tudo.</p>
+        <ul class="srv-features">
+          <li>Diagnóstico completo da presença digital</li>
+          <li>Criação da estratégia de conteúdo personalizada</li>
+          <li>Calendário estratégico de conteúdo (30 dias)</li>
+          <li>Alinhamento após 30 dias para ajuste</li>
+          <li>Entrega organizada em PDF</li>
+          <li class="no">Acompanhamento contínuo</li>
+          <li class="no">Gestão de conteúdo</li>
+        </ul>
+        <a href="https://wa.me/5561982305647?text=Olá%20Reny!%20Tenho%20interesse%20no%20Plano%20Basic.%20Pode%20me%20enviar%20uma%20proposta?" target="_blank" class="srv-cta">Pedir proposta →</a>
+      </div>
+
+      <!-- STAR -->
+      <div class="srv-card featured">
+        <span class="srv-badge">Plano Star</span>
+        <h3>Estratégia + Acompanhamento</h3>
+        <p class="srv-desc">Para quem quer estratégia e suporte ativo no processo.</p>
+        <ul class="srv-features">
+          <li>Tudo do Plano Basic</li>
+          <li>Ajustes estratégicos após 30 dias</li>
+          <li>Análise de métricas e comportamento do conteúdo</li>
+          <li>Otimização de narrativa e formatos</li>
+          <li>Suporte via WhatsApp durante o período</li>
+          <li class="no">Gestão completa de redes sociais</li>
+          <li class="no">Produção de conteúdo feita por mim</li>
+        </ul>
+        <a href="https://wa.me/5561982305647?text=Olá%20Reny!%20Tenho%20interesse%20no%20Plano%20Star.%20Pode%20me%20enviar%20uma%20proposta?" target="_blank" class="srv-cta">Pedir proposta →</a>
+      </div>
+
+      <!-- PREMIUM -->
+      <div class="srv-card">
+        <span class="srv-badge">Plano Premium</span>
+        <h3>Gestão Estratégica Completa</h3>
+        <p class="srv-desc">Para quem quer delegar tudo e focar no negócio.</p>
+        <ul class="srv-features">
+          <li>Tudo do Plano Star</li>
+          <li>Gestão estratégica das redes sociais</li>
+          <li>Planejamento mensal contínuo</li>
+          <li>Conteúdo alinhado à identidade, rotina e realidade</li>
+          <li>Reuniões estratégicas recorrentes</li>
+          <li>Acompanhamento próximo e ativo</li>
+        </ul>
+        <a href="https://wa.me/5561982305647?text=Olá%20Reny!%20Tenho%20interesse%20no%20Plano%20Premium.%20Pode%20me%20enviar%20uma%20proposta?" target="_blank" class="srv-cta">Pedir proposta →</a>
+      </div>
+
+    </div>
+    <p class="srv-note reveal">✦ Cada proposta é <strong>personalizada para a sua necessidade</strong>. Entre em contato para receber o valor ideal para você.</p>
+  </div>
+</section>
+
+<!-- PROCESSO -->
+<section id="processo">
+  <div class="container">
+    <p class="s-label reveal">Como funciona</p>
+    <h2 class="reveal">Etapas do Projeto</h2>
+    <div class="bar reveal"></div>
+    <div class="processo-grid reveal">
+      <div class="proc-card">
+        <div class="proc-num">01</div>
+        <h3>Briefing & Alinhamento</h3>
+        <p>Reunião inicial para entender profundamente seu negócio, objetivos, público e contexto atual.</p>
+      </div>
+      <div class="proc-card">
+        <div class="proc-num">02</div>
+        <h3>Planilha de Referências</h3>
+        <p>Preenchimento colaborativo para mapear identidade visual, tom de voz e referências de mercado.</p>
+      </div>
+      <div class="proc-card">
+        <div class="proc-num">03</div>
+        <h3>Criação da Estratégia</h3>
+        <p>Desenvolvimento da estratégia personalizada, 100% alinhada aos seus objetivos e realidade.</p>
+      </div>
+      <div class="proc-card">
+        <div class="proc-num">04</div>
+        <h3>Conversas de Alinhamento</h3>
+        <p>Check-ins estratégicos para ajustar a rota e garantir que estamos no caminho certo.</p>
+      </div>
+      <div class="proc-card">
+        <div class="proc-num">05</div>
+        <h3>Apresentação da Estratégia</h3>
+        <p>Apresentação detalhada do plano com justificativas, cronograma e métricas de sucesso.</p>
+      </div>
+      <div class="proc-card">
+        <div class="proc-num">06</div>
+        <h3>Entrega & Execução</h3>
+        <p>Colocamos a estratégia em prática com acompanhamento contínuo e relatórios claros.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- RESULTADOS -->
+<section id="resultados">
+  <div class="container">
+    <div class="res-intro reveal">
+      <p class="s-label">Resultados reais</p>
+      <h2>Números que falam por si.</h2>
+      <div class="bar"></div>
+      <p>Esses são resultados reais de clientes que passaram pela minha estratégia. Não são promessas — são prints do gerenciador.</p>
+    </div>
+
+    <div class="metrics-strip reveal">
+      <div class="ms-item">
+        <span class="ms-val">+28%</span>
+        <div class="ms-lbl">Crescimento de visualizações</div>
+      </div>
+      <div class="ms-item">
+        <span class="ms-val">+134%</span>
+        <div class="ms-lbl">Aumento nas interações</div>
+      </div>
+      <div class="ms-item">
+        <span class="ms-val">+72%</span>
+        <div class="ms-lbl">Crescimento orgânico</div>
+      </div>
+      <div class="ms-item">
+        <span class="ms-val">20.207</span>
+        <div class="ms-lbl">Visualizações em campanha de reconhecimento</div>
+      </div>
+    </div>
+
+    <div class="clientes-grid reveal">
+      <div class="cli-card">
+        <h3>Natuclinic</h3>
+        <ul>
+          <li>Aumento do alcance orgânico</li>
+          <li>Redução no custo por lead em anúncios</li>
+          <li>Melhora no rankeamento Google</li>
+          <li>Implementação de site com blog</li>
+        </ul>
+      </div>
+      <div class="cli-card">
+        <h3>Luiz Gustavo</h3>
+        <ul>
+          <li>Criação de estratégia completa</li>
+          <li>Gerenciamento de lançamento nas plataformas</li>
+          <li>Gestão de YouTube com alcance orgânico</li>
+        </ul>
+      </div>
+      <div class="cli-card">
+        <h3>Luanzito</h3>
+        <ul>
+          <li>Criação de estratégia digital</li>
+          <li>Confecção de mídia kit profissional</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="compare-block reveal">
+      <h3>Anúncios com estratégia vs. sem estratégia</h3>
+      <div class="compare-cols">
+        <div class="comp-col">
+          <div class="comp-col-title bad">✕ Sem estratégia</div>
+          <div class="comp-row"><span class="label">Campanha 1 - Visualizações</span><span class="value bad">514</span></div>
+          <div class="comp-row"><span class="label">Campanha 2 - Visualizações</span><span class="value bad">14.096</span></div>
+          <div class="comp-row"><span class="label">Campanha 1 - Cliques</span><span class="value bad">7</span></div>
+          <div class="comp-row"><span class="label">Campanha 2 - Custo</span><span class="value bad">R$148,45</span></div>
+        </div>
+        <div class="comp-col">
+          <div class="comp-col-title good">✔ Com estratégia</div>
+          <div class="comp-row"><span class="label">Tráfego YouTube - Views</span><span class="value good">4.302</span></div>
+          <div class="comp-row"><span class="label">Reconhecimento - Alcance</span><span class="value good">20.695</span></div>
+          <div class="comp-row"><span class="label">Cliques no link</span><span class="value good">914</span></div>
+          <div class="comp-row"><span class="label">Custo total</span><span class="value good">R$28,78</span></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FAQ -->
+<section id="faq">
+  <div class="container">
+    <div class="faq-inner">
+      <p class="s-label">Dúvidas frequentes</p>
+      <h2>FAQ</h2>
+      <div class="bar"></div>
+
+      <div class="faq-item">
+        <button class="faq-q">Como funciona o processo de contratação? <span class="faq-icon">+</span></button>
+        <div class="faq-a"><p>Edite esta resposta diretamente no arquivo HTML. Basta encontrar esta pergunta e substituir o texto dentro da tag &lt;p&gt; pela sua resposta real.</p></div>
+      </div>
+      <div class="faq-item">
+        <button class="faq-q">Quanto tempo leva para ver resultados? <span class="faq-icon">+</span></button>
+        <div class="faq-a"><p>Edite esta resposta diretamente no arquivo HTML com o prazo real que você costuma comunicar aos seus clientes.</p></div>
+      </div>
+      <div class="faq-item">
+        <button class="faq-q">Você atende qualquer tipo de negócio? <span class="faq-icon">+</span></button>
+        <div class="faq-a"><p>Edite esta resposta com os segmentos que você atende e qualquer restrição ou especialidade que queira comunicar.</p></div>
+      </div>
+      <div class="faq-item">
+        <button class="faq-q">Como é feita a proposta personalizada? <span class="faq-icon">+</span></button>
+        <div class="faq-a"><p>Edite esta resposta explicando como você monta as propostas e o que o cliente precisa compartilhar para receber uma.</p></div>
+      </div>
+      <div class="faq-item">
+        <button class="faq-q">Posso adicionar mais perguntas aqui? <span class="faq-icon">+</span></button>
+        <div class="faq-a"><p>Sim! Basta copiar o bloco &lt;div class="faq-item"&gt; completo e colar abaixo, trocando a pergunta e a resposta. Me chama que te explico passo a passo!</p></div>
+      </div>
+
+      <div class="faq-edit-note">
+        <strong>✦ Como editar o FAQ:</strong> Abra o arquivo <code>index.html</code> no Replit, encontre a seção <code>&lt;!-- FAQ --&gt;</code> e substitua as respostas pelos seus textos reais. Para adicionar uma nova pergunta, copie um bloco <code>faq-item</code> completo e cole abaixo do último.
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CTA FINAL -->
+<section id="cta-final">
+  <div class="container">
+    <p class="s-label reveal">Vamos começar</p>
+    <h2 class="reveal">Se você quer uma presença digital que represente quem você é —</h2>
+    <p class="reveal">esse é o caminho. Fale comigo e vamos construir juntos a estratégia do seu negócio.</p>
+    <div class="cta-group reveal">
+      <a href="https://wa.me/5561982305647?text=Olá%20Reny!%20Quero%20uma%20proposta%20personalizada." target="_blank" class="btn-wa">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347z"/><path d="M12 0C5.373 0 0 5.373 0 12c0 2.123.554 4.118 1.528 5.85L0 24l6.335-1.506A11.955 11.955 0 0012 24c6.627 0 12-5.373 12-12S18.627 0 12 0zm0 22c-1.885 0-3.651-.515-5.17-1.41l-.37-.22-3.763.895.952-3.65-.24-.38A9.945 9.945 0 012 12c0-5.514 4.486-10 10-10s10 4.486 10 10-4.486 10-10 10z"/></svg>
+        Falar no WhatsApp
+      </a>
+      <a href="blog.html" class="btn-outline">Ler o Blog</a>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <p>© 2025 Reny Paes // Estratégia & Conteúdo Digital</p>
+  <a href="https://wa.me/5561982305647" target="_blank">(61) 98230-5647</a>
+</footer>
+
+<!-- WHATSAPP FLOAT -->
+<a href="https://wa.me/5561982305647?text=Olá%20Reny!%20Vi%20seu%20site%20e%20quero%20saber%20mais." target="_blank" class="wa-float" aria-label="WhatsApp">
+  <svg width="28" height="28" viewBox="0 0 24 24" fill="white"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347z"/><path d="M12 0C5.373 0 0 5.373 0 12c0 2.123.554 4.118 1.528 5.85L0 24l6.335-1.506A11.955 11.955 0 0012 24c6.627 0 12-5.373 12-12S18.627 0 12 0zm0 22c-1.885 0-3.651-.515-5.17-1.41l-.37-.22-3.763.895.952-3.65-.24-.38A9.945 9.945 0 012 12c0-5.514 4.486-10 10-10s10 4.486 10 10-4.486 10-10 10z"/></svg>
+</a>
+
+<script>
+  // Nav toggle
+  const toggle = document.getElementById('navToggle');
+  const links = document.getElementById('navLinks');
+  toggle.addEventListener('click', () => links.classList.toggle('open'));
+
+  // FAQ accordion
+  document.querySelectorAll('.faq-q').forEach(btn => {
+    btn.addEventListener('click', () => {
+      const item = btn.parentElement;
+      const isOpen = item.classList.contains('open');
+      document.querySelectorAll('.faq-item').forEach(i => i.classList.remove('open'));
+      if (!isOpen) item.classList.add('open');
+    });
+  });
+
+  // Scroll reveal
+  const observer = new IntersectionObserver(entries => {
+    entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('visible'); });
+  }, { threshold: 0.08 });
+  document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+</script>
+</body>
+</html>

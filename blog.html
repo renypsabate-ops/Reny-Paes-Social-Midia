@@ -1,0 +1,256 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Blog — Reny Paes // Estratégia & Conteúdo Digital</title>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;0,900;1,700&family=Outfit:wght@300;400;500;600&display=swap" rel="stylesheet"/>
+  <style>
+    :root {
+      --ink: #0C0618;
+      --deep: #130A24;
+      --plum: #3D1060;
+      --violet: #7C3AED;
+      --lavender: #A78BFA;
+      --soft: #EDE9FE;
+      --muted: #9B8BAE;
+      --white: #FAF8FF;
+    }
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+    body { font-family: 'Outfit', sans-serif; background: var(--ink); color: var(--white); overflow-x: hidden; }
+    body::before {
+      content: ''; position: fixed; inset: 0; z-index: 0; pointer-events: none;
+      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.04'/%3E%3C/svg%3E");
+      opacity: .5;
+    }
+
+    /* ─── NAV ─── */
+    nav {
+      position: fixed; top: 0; left: 0; right: 0; z-index: 200;
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 1.1rem 6vw;
+      background: rgba(12,6,24,0.85); backdrop-filter: blur(20px);
+      border-bottom: 1px solid rgba(124,58,237,0.12);
+    }
+    .logo { font-family: 'Playfair Display', serif; font-size: 1.1rem; font-weight: 700; color: var(--white); letter-spacing: .02em; text-decoration: none; }
+    .logo span { color: var(--lavender); font-style: italic; }
+    .nav-links { display: flex; align-items: center; gap: 2.2rem; list-style: none; }
+    .nav-links a { font-size: .85rem; color: var(--muted); text-decoration: none; letter-spacing: .04em; transition: color .2s; }
+    .nav-links a:hover, .nav-links a.active { color: var(--white); }
+    .nav-pill { background: var(--violet); color: #fff !important; padding: .5rem 1.4rem; border-radius: 100px; font-size: .85rem; font-weight: 500; text-decoration: none; transition: background .2s; }
+    .nav-pill:hover { background: var(--lavender); color: var(--ink) !important; }
+    .nav-toggle { display: none; flex-direction: column; gap: 5px; cursor: pointer; background: none; border: none; padding: 4px; }
+    .nav-toggle span { display: block; width: 24px; height: 2px; background: var(--white); border-radius: 2px; }
+
+    /* ─── BLOG HEADER ─── */
+    .blog-header {
+      padding: 9rem 6vw 4rem; text-align: center; position: relative;
+      background: radial-gradient(ellipse 70% 60% at 50% 40%, rgba(124,58,237,.18) 0%, transparent 70%);
+    }
+    .blog-eyebrow {
+      display: inline-flex; align-items: center; gap: .5rem;
+      background: rgba(124,58,237,.15); border: 1px solid rgba(167,139,250,.3);
+      color: var(--lavender); font-size: .75rem; letter-spacing: .14em;
+      padding: .4rem 1rem; border-radius: 100px; margin-bottom: 1.5rem;
+      text-transform: uppercase;
+    }
+    .blog-header h1 { font-family: 'Playfair Display', serif; font-size: clamp(2.5rem, 5vw, 4rem); font-weight: 900; margin-bottom: 1rem; }
+    .blog-header p { color: var(--muted); font-size: 1.05rem; max-width: 520px; margin: 0 auto; line-height: 1.75; font-weight: 300; }
+
+    /* ─── BLOG MAIN ─── */
+    .blog-main { max-width: 1160px; margin: 0 auto; padding: 4rem 6vw 6rem; display: grid; grid-template-columns: 1fr 320px; gap: 4rem; align-items: start; }
+
+    /* ─── POSTS GRID ─── */
+    .posts-grid { display: grid; gap: 2rem; }
+    .post-featured {
+      background: rgba(61,16,96,.2); border: 1px solid rgba(124,58,237,.2);
+      border-radius: 22px; overflow: hidden; transition: border-color .25s, transform .25s;
+    }
+    .post-featured:hover { border-color: var(--lavender); transform: translateY(-4px); }
+    .post-img {
+      width: 100%; aspect-ratio: 16/7; object-fit: cover;
+      background: linear-gradient(135deg, var(--plum), var(--violet));
+      display: flex; align-items: center; justify-content: center;
+      font-size: 3rem; color: rgba(255,255,255,.3);
+    }
+    .post-body { padding: 2rem; }
+    .post-meta { display: flex; align-items: center; gap: 1rem; margin-bottom: 1rem; flex-wrap: wrap; }
+    .post-cat { background: rgba(124,58,237,.2); color: var(--lavender); font-size: .72rem; letter-spacing: .1em; text-transform: uppercase; padding: .3rem .8rem; border-radius: 100px; }
+    .post-date { font-size: .78rem; color: var(--muted); }
+    .post-body h2 { font-family: 'Playfair Display', serif; font-size: 1.5rem; font-weight: 700; margin-bottom: .8rem; line-height: 1.3; }
+    .post-body p { font-size: .93rem; color: var(--muted); line-height: 1.75; margin-bottom: 1.5rem; font-weight: 300; }
+    .post-link { color: var(--lavender); font-size: .88rem; font-weight: 500; text-decoration: none; display: inline-flex; align-items: center; gap: .4rem; transition: gap .2s; }
+    .post-link:hover { gap: .7rem; }
+
+    .posts-small { display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem; }
+    .post-card {
+      background: rgba(19,10,36,.6); border: 1px solid rgba(124,58,237,.12);
+      border-radius: 18px; padding: 1.6rem; transition: border-color .25s, transform .25s;
+    }
+    .post-card:hover { border-color: rgba(124,58,237,.35); transform: translateY(-3px); }
+    .post-card .post-cat { display: inline-block; margin-bottom: .8rem; }
+    .post-card h3 { font-family: 'Playfair Display', serif; font-size: 1.05rem; font-weight: 700; margin-bottom: .6rem; line-height: 1.35; }
+    .post-card p { font-size: .85rem; color: var(--muted); line-height: 1.65; margin-bottom: 1rem; font-weight: 300; }
+    .post-card .post-date { font-size: .75rem; color: var(--muted); }
+
+    /* ─── NEW POST NOTICE ─── */
+    .new-post-notice {
+      background: rgba(124,58,237,.08); border: 1px dashed rgba(124,58,237,.3);
+      border-radius: 16px; padding: 2rem; text-align: center; margin-top: 1rem;
+    }
+    .new-post-notice p { color: var(--muted); font-size: .88rem; line-height: 1.7; margin-bottom: 1rem; }
+    .new-post-notice strong { color: var(--lavender); }
+    .new-post-notice code { background: rgba(124,58,237,.15); padding: .15rem .4rem; border-radius: 4px; font-size: .82rem; color: var(--lavender); }
+
+    /* ─── SIDEBAR ─── */
+    .sidebar { position: sticky; top: 7rem; display: flex; flex-direction: column; gap: 2rem; }
+    .sidebar-card { background: rgba(19,10,36,.7); border: 1px solid rgba(124,58,237,.15); border-radius: 18px; padding: 1.8rem; }
+    .sidebar-card h3 { font-family: 'Playfair Display', serif; font-size: 1.05rem; font-weight: 700; margin-bottom: 1.2rem; padding-bottom: .8rem; border-bottom: 1px solid rgba(124,58,237,.12); }
+    .sidebar-cats { display: flex; flex-direction: column; gap: .5rem; }
+    .sidebar-cats a { display: flex; justify-content: space-between; align-items: center; font-size: .88rem; color: var(--muted); text-decoration: none; padding: .5rem 0; border-bottom: 1px solid rgba(124,58,237,.07); transition: color .2s; }
+    .sidebar-cats a:hover { color: var(--lavender); }
+    .sidebar-cats a span { background: rgba(124,58,237,.15); color: var(--lavender); font-size: .72rem; padding: .15rem .5rem; border-radius: 100px; }
+    .sidebar-cta { background: linear-gradient(135deg, rgba(124,58,237,.25), rgba(61,16,96,.3)); border: 1px solid rgba(124,58,237,.3); border-radius: 18px; padding: 1.8rem; text-align: center; }
+    .sidebar-cta p { font-size: .88rem; color: var(--muted); line-height: 1.65; margin-bottom: 1.5rem; }
+    .sidebar-cta a { display: block; background: var(--violet); color: #fff; padding: .75rem; border-radius: 10px; text-decoration: none; font-size: .88rem; font-weight: 500; transition: background .2s; }
+    .sidebar-cta a:hover { background: var(--lavender); color: var(--ink); }
+
+    /* ─── FOOTER ─── */
+    footer { padding: 2rem 6vw; border-top: 1px solid rgba(124,58,237,.1); display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 1rem; }
+    footer p { font-size: .82rem; color: rgba(155,139,174,.5); }
+    footer a { color: var(--lavender); text-decoration: none; font-size: .82rem; }
+
+    /* ─── WA FLOAT ─── */
+    .wa-float { position: fixed; bottom: 2rem; right: 2rem; z-index: 300; width: 56px; height: 56px; border-radius: 50%; background: #25D366; display: flex; align-items: center; justify-content: center; box-shadow: 0 8px 30px rgba(37,211,102,.4); text-decoration: none; transition: transform .25s; animation: pulse-wa 2.5s ease infinite; }
+    .wa-float:hover { transform: scale(1.12); }
+    @keyframes pulse-wa { 0%, 100% { box-shadow: 0 8px 30px rgba(37,211,102,.4); } 50% { box-shadow: 0 8px 50px rgba(37,211,102,.7); } }
+
+    @media (max-width: 900px) {
+      .blog-main { grid-template-columns: 1fr; }
+      .sidebar { position: static; }
+      .posts-small { grid-template-columns: 1fr; }
+      .nav-links { display: none; }
+      .nav-links.open { display: flex; flex-direction: column; position: fixed; top: 60px; left: 0; right: 0; background: rgba(12,6,24,.97); padding: 2rem 6vw; gap: 1.5rem; border-bottom: 1px solid rgba(124,58,237,.15); }
+      .nav-toggle { display: flex; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <a href="index.html" class="logo">Reny Paes <span>// Estratégia</span></a>
+  <ul class="nav-links" id="navLinks">
+    <li><a href="index.html#sobre">Sobre</a></li>
+    <li><a href="index.html#servicos">Serviços</a></li>
+    <li><a href="index.html#resultados">Resultados</a></li>
+    <li><a href="blog.html" class="active">Blog</a></li>
+    <li><a href="index.html#cta-final" class="nav-pill">Quero uma proposta</a></li>
+  </ul>
+  <button class="nav-toggle" id="navToggle" aria-label="Menu"><span></span><span></span><span></span></button>
+</nav>
+
+<!-- HEADER -->
+<header class="blog-header">
+  <div class="blog-eyebrow">✦ Conteúdo com intenção</div>
+  <h1>Blog</h1>
+  <p>Estratégia, conteúdo e marketing digital na prática. Aqui você aprende o que realmente funciona.</p>
+</header>
+
+<!-- MAIN -->
+<div class="blog-main">
+  <main>
+    <!-- POST DESTAQUE -->
+    <div class="post-featured">
+      <div class="post-img">✦</div>
+      <div class="post-body">
+        <div class="post-meta">
+          <span class="post-cat">Estratégia</span>
+          <span class="post-date">Março, 2026</span>
+        </div>
+        <h2>Por que sua empresa está no digital mas não cresce? A resposta está na estratégia.</h2>
+        <p>Ter perfil em todas as redes não é estratégia. Postar todos os dias sem intenção não é estratégia. Neste artigo eu explico o que separa quem patina de quem cresce de forma consistente no digital.</p>
+        <a href="#" class="post-link">Ler artigo completo →</a>
+      </div>
+    </div>
+
+    <!-- POSTS MENORES -->
+    <div class="posts-small" style="margin-top: 1.5rem;">
+      <div class="post-card">
+        <span class="post-cat">Conteúdo</span>
+        <h3>Como criar um calendário editorial que você realmente vai seguir</h3>
+        <p>Planejamento de conteúdo não precisa ser complicado. Veja como estruturo calendários para meus clientes.</p>
+        <div class="post-date">Fevereiro, 2026</div>
+      </div>
+      <div class="post-card">
+        <span class="post-cat">Anúncios</span>
+        <h3>Estratégia antes do tráfego pago: o que acontece quando você inverte a ordem</h3>
+        <p>Os números dos meus clientes mostram claramente: anunciar sem estratégia é queimar dinheiro.</p>
+        <div class="post-date">Janeiro, 2026</div>
+      </div>
+      <div class="post-card">
+        <span class="post-cat">Marca Pessoal</span>
+        <h3>Autoridade digital não se compra — se constrói. Veja como</h3>
+        <p>O que diferencia quem é referência de quem só aparece. Um guia prático de posicionamento.</p>
+        <div class="post-date">Janeiro, 2026</div>
+      </div>
+      <div class="post-card">
+        <span class="post-cat">Métricas</span>
+        <h3>Quais métricas realmente importam para o seu negócio?</h3>
+        <p>Likes não pagam boleto. Aprenda a ler os números que mostram se sua estratégia está funcionando.</p>
+        <div class="post-date">Dezembro, 2025</div>
+      </div>
+    </div>
+
+    <!-- AVISO PARA ADICIONAR POSTS -->
+    <div class="new-post-notice">
+      <p><strong>✦ Como adicionar novos posts:</strong> Copie um bloco <code>post-card</code> ou <code>post-featured</code>, cole acima e troque o título, categoria, data e texto. Me chama no WhatsApp que te mostro exatamente como fazer — é mais simples do que parece!</p>
+    </div>
+  </main>
+
+  <!-- SIDEBAR -->
+  <aside class="sidebar">
+    <div class="sidebar-card">
+      <h3>Categorias</h3>
+      <div class="sidebar-cats">
+        <a href="#">Estratégia <span>3</span></a>
+        <a href="#">Conteúdo <span>2</span></a>
+        <a href="#">Anúncios <span>1</span></a>
+        <a href="#">Marca Pessoal <span>2</span></a>
+        <a href="#">Métricas <span>1</span></a>
+      </div>
+    </div>
+
+    <div class="sidebar-cta">
+      <h3 style="font-family:'Playfair Display',serif; font-size:1.1rem; margin-bottom:.8rem;">Quer uma estratégia personalizada?</h3>
+      <p>Leu até aqui? Então você já entende o valor de uma boa estratégia. Vamos criar a sua.</p>
+      <a href="https://wa.me/5561982305647?text=Olá%20Reny!%20Li%20o%20seu%20blog%20e%20quero%20uma%20proposta." target="_blank">Falar no WhatsApp →</a>
+    </div>
+
+    <div class="sidebar-card">
+      <h3>Sobre a Reny</h3>
+      <p style="font-size:.87rem; color:var(--muted); line-height:1.7;">Estrategista de conteúdo digital com 4+ anos de experiência. Especialista em transformar presença digital em autoridade real.</p>
+      <a href="index.html#sobre" style="display:inline-block; margin-top:1rem; color:var(--lavender); font-size:.85rem; text-decoration:none;">Saiba mais →</a>
+    </div>
+  </aside>
+</div>
+
+<!-- FOOTER -->
+<footer>
+  <p>© 2025 Reny Paes // Estratégia & Conteúdo Digital</p>
+  <a href="https://wa.me/5561982305647" target="_blank">(61) 98230-5647</a>
+</footer>
+
+<!-- WHATSAPP FLOAT -->
+<a href="https://wa.me/5561982305647?text=Olá%20Reny!%20Vi%20seu%20site%20e%20quero%20saber%20mais." target="_blank" class="wa-float" aria-label="WhatsApp">
+  <svg width="28" height="28" viewBox="0 0 24 24" fill="white"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347z"/><path d="M12 0C5.373 0 0 5.373 0 12c0 2.123.554 4.118 1.528 5.85L0 24l6.335-1.506A11.955 11.955 0 0012 24c6.627 0 12-5.373 12-12S18.627 0 12 0zm0 22c-1.885 0-3.651-.515-5.17-1.41l-.37-.22-3.763.895.952-3.65-.24-.38A9.945 9.945 0 012 12c0-5.514 4.486-10 10-10s10 4.486 10 10-4.486 10-10 10z"/></svg>
+</a>
+
+<script>
+  const toggle = document.getElementById('navToggle');
+  const links = document.getElementById('navLinks');
+  toggle.addEventListener('click', () => links.classList.toggle('open'));
+</script>
+</body>
+</html>
