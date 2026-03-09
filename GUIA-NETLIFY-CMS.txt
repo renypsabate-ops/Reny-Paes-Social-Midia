@@ -1,0 +1,196 @@
+# 📋 GUIA COMPLETO — Blog com Admin no Netlify CMS
+# Reny Paes // Estratégia & Conteúdo Digital
+# ─────────────────────────────────────────────
+
+## VISÃO GERAL
+- Login com usuário e senha via Netlify Identity
+- Painel admin em /admin (criar, editar, excluir posts e categorias)
+- Posts salvos em arquivos Markdown no GitHub (gratuito)
+- Publicação automática ao salvar no painel
+- 100% gratuito
+
+─────────────────────────────────────────────
+## PASSO 1 — ESTRUTURA DE PASTAS NO REPLIT
+─────────────────────────────────────────────
+
+Crie esta estrutura no seu projeto:
+
+/
+├── index.html
+├── blog.html
+├── admin/
+│   ├── index.html        ← painel admin
+│   └── config.yml        ← configuração do CMS
+├── posts/
+│   └── exemplo-post.md   ← seus posts ficam aqui
+└── _headers              ← segurança
+
+─────────────────────────────────────────────
+## PASSO 2 — ARQUIVO: admin/index.html
+─────────────────────────────────────────────
+
+Cole este conteúdo exato no arquivo admin/index.html:
+
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Admin — Reny Paes</title>
+  <script src="https://identity.netlify.com/v1/netlify-identity-widget.js"></script>
+</head>
+<body>
+  <script src="https://unpkg.com/netlify-cms@^2.0.0/dist/netlify-cms.js"></script>
+</body>
+</html>
+
+─────────────────────────────────────────────
+## PASSO 3 — ARQUIVO: admin/config.yml
+─────────────────────────────────────────────
+
+Cole este conteúdo no arquivo admin/config.yml:
+
+backend:
+  name: git-gateway
+  branch: main
+
+media_folder: "imagens"
+public_folder: "/imagens"
+
+collections:
+  - name: "posts"
+    label: "Posts do Blog"
+    folder: "posts"
+    create: true
+    slug: "{{year}}-{{month}}-{{day}}-{{slug}}"
+    fields:
+      - { label: "Título", name: "title", widget: "string" }
+      - { label: "Data", name: "date", widget: "datetime" }
+      - { label: "Categoria", name: "categoria", widget: "select", options: ["Estratégia", "Conteúdo", "Anúncios", "Marca Pessoal", "Métricas"] }
+      - { label: "Resumo", name: "resumo", widget: "text" }
+      - { label: "Imagem de capa", name: "capa", widget: "image", required: false }
+      - { label: "Conteúdo", name: "body", widget: "markdown" }
+      - { label: "Publicado?", name: "publicado", widget: "boolean", default: true }
+
+─────────────────────────────────────────────
+## PASSO 4 — ADICIONAR SCRIPT NO index.html e blog.html
+─────────────────────────────────────────────
+
+Cole este script antes do </head> nos dois arquivos:
+
+<script src="https://identity.netlify.com/v1/netlify-identity-widget.js"></script>
+
+E cole este script antes do </body> nos dois arquivos:
+
+<script>
+  if (window.netlifyIdentity) {
+    window.netlifyIdentity.on("init", user => {
+      if (!user) {
+        window.netlifyIdentity.on("login", () => {
+          document.location.href = "/admin/";
+        });
+      }
+    });
+  }
+</script>
+
+─────────────────────────────────────────────
+## PASSO 5 — ARQUIVO: _headers (segurança)
+─────────────────────────────────────────────
+
+Crie o arquivo _headers na raiz com este conteúdo:
+
+/*
+  X-Frame-Options: DENY
+  X-XSS-Protection: 1; mode=block
+
+/admin/*
+  X-Robots-Tag: noindex
+
+─────────────────────────────────────────────
+## PASSO 6 — SUBIR NO GITHUB (obrigatório)
+─────────────────────────────────────────────
+
+O Netlify CMS precisa de um repositório GitHub para salvar os posts.
+
+1. Acesse github.com e crie uma conta gratuita
+2. Clique em "New repository"
+3. Nome: reny-paes-site
+4. Marque "Public"
+5. Clique "Create repository"
+6. No Replit: vá em "Version Control" (ícone de ramificação)
+7. Conecte ao repositório que você criou
+8. Faça o primeiro commit com todos os arquivos
+
+─────────────────────────────────────────────
+## PASSO 7 — PUBLICAR NO NETLIFY
+─────────────────────────────────────────────
+
+1. Acesse netlify.com e crie conta gratuita
+2. Clique "Add new site" → "Import an existing project"
+3. Escolha "GitHub" e selecione seu repositório
+4. Clique "Deploy site"
+5. Aguarde ~2 minutos — site no ar!
+
+─────────────────────────────────────────────
+## PASSO 8 — ATIVAR NETLIFY IDENTITY (login admin)
+─────────────────────────────────────────────
+
+1. No painel do Netlify, vá em "Site configuration"
+2. Clique "Identity" no menu lateral
+3. Clique "Enable Identity"
+4. Em "Registration", selecione "Invite only" ← IMPORTANTE
+5. Em "Services" → "Git Gateway" → clique "Enable Git Gateway"
+6. Vá em "Identity" → "Invite users"
+7. Digite seu e-mail e envie o convite
+8. Abra o e-mail e defina sua senha
+9. Pronto! Acesse seusite.netlify.app/admin
+
+─────────────────────────────────────────────
+## COMO USAR O PAINEL ADMIN
+─────────────────────────────────────────────
+
+→ Acessar: seusite.netlify.app/admin
+→ Login: seu e-mail + senha que você criou
+→ Criar post: clique "New Posts do Blog"
+→ Preencha: título, data, categoria, resumo, conteúdo
+→ Clique "Publish" → post vai ao ar em ~1 minuto
+→ Editar: clique em qualquer post existente
+→ Excluir: abra o post → "Delete unpublished" ou "Delete published"
+
+─────────────────────────────────────────────
+## ADICIONAR CATEGORIA NOVA
+─────────────────────────────────────────────
+
+Abra admin/config.yml e adicione a nova categoria na linha:
+options: ["Estratégia", "Conteúdo", "Anúncios", "Marca Pessoal", "Métricas", "SUA NOVA CATEGORIA"]
+
+Salve, faça commit e o Netlify atualiza automaticamente.
+
+─────────────────────────────────────────────
+## RESUMO DO FLUXO
+─────────────────────────────────────────────
+
+Replit (código) → GitHub (repositório) → Netlify (site publicado)
+                                              ↓
+                                    /admin (painel CMS)
+                                              ↓
+                               Você escreve e publica posts
+                                              ↓
+                            Netlify salva no GitHub e atualiza o site
+
+─────────────────────────────────────────────
+## CUSTO TOTAL: R$ 0,00 🎉
+─────────────────────────────────────────────
+
+- Replit (editor): gratuito
+- GitHub (repositório): gratuito
+- Netlify (hospedagem + CMS): gratuito até 100GB de banda/mês
+- Netlify Identity: gratuito até 1.000 usuários
+
+─────────────────────────────────────────────
+## PRECISA DE AJUDA?
+─────────────────────────────────────────────
+
+Me chame no WhatsApp em cada etapa — vou te guiando passo a passo!
+Cada etapa leva ~5 minutos. Total estimado: 30-40 minutos para tudo no ar.
