@@ -148,10 +148,34 @@
 
     /* ─── SOBRE ─── */
     #sobre { padding: 7rem 0; border-top: 1px solid rgba(124,58,237,.12); }
-    .sobre-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 6rem; align-items: center; }
+    .sobre-grid { display: grid; grid-template-columns: 1fr 1.2fr; gap: 5rem; align-items: center; }
+    .sobre-foto { position: relative; }
+    .foto-wrap {
+      position: relative; border-radius: 24px; overflow: hidden;
+      border: 1px solid rgba(124,58,237,.25);
+      box-shadow: 0 30px 80px rgba(124,58,237,.2);
+    }
+    .foto-wrap img {
+      width: 100%; display: block;
+      aspect-ratio: 3/4; object-fit: cover; object-position: top;
+      transition: transform .4s ease;
+    }
+    .foto-wrap:hover img { transform: scale(1.03); }
+    .foto-wrap::after {
+      content: ''; position: absolute; inset: 0;
+      background: linear-gradient(to bottom, transparent 60%, rgba(12,6,24,.5) 100%);
+      pointer-events: none;
+    }
+    .foto-badge {
+      position: absolute; bottom: 1.5rem; left: 1.5rem; z-index: 2;
+      background: rgba(124,58,237,.85); backdrop-filter: blur(10px);
+      color: #fff; font-size: .78rem; letter-spacing: .1em;
+      padding: .5rem 1.1rem; border-radius: 100px;
+      border: 1px solid rgba(167,139,250,.4);
+    }
     .sobre-text p { color: var(--muted); line-height: 1.85; font-weight: 300; font-size: 1.05rem; margin-bottom: 1rem; }
     .sobre-text p strong { color: var(--white); font-weight: 500; }
-    .sobre-stats { display: grid; grid-template-columns: 1fr 1fr; gap: 1.2rem; }
+    .sobre-stats { display: grid; grid-template-columns: 1fr 1fr; gap: 1.2rem; margin-top: 2rem; }
     .s-stat {
       background: rgba(61,16,96,.2); border: 1px solid rgba(124,58,237,.18);
       border-radius: 18px; padding: 1.6rem; transition: border-color .25s, transform .25s;
@@ -362,6 +386,7 @@
       .nav-links.open { display: flex; flex-direction: column; position: fixed; top: 60px; left: 0; right: 0; background: rgba(12,6,24,.97); padding: 2rem 6vw; gap: 1.5rem; border-bottom: 1px solid rgba(124,58,237,.15); }
       .nav-toggle { display: flex; }
       .sobre-grid, .expertise-grid, .servicos-grid, .processo-grid, .clientes-grid, .compare-cols { grid-template-columns: 1fr; }
+      .foto-wrap img { aspect-ratio: 4/3; }
       .metrics-strip { grid-template-columns: 1fr 1fr; }
       footer { flex-direction: column; text-align: center; }
     }
@@ -430,6 +455,12 @@
 <section id="sobre">
   <div class="container">
     <div class="sobre-grid">
+      <div class="sobre-foto reveal">
+        <div class="foto-wrap">
+          <img src="reny-foto.jpeg" alt="Reny Paes — Estrategista de Conteúdo Digital" />
+          <div class="foto-badge">✦ 4+ anos de experiência</div>
+        </div>
+      </div>
       <div class="sobre-text reveal">
         <p class="s-label">Quem sou eu</p>
         <h2>Reny Paes</h2>
@@ -437,23 +468,23 @@
         <p>Sou <strong>bacharel em Administração de Empresas pela UNIPLAN</strong> e formada em Social Media Estrategista pela Like Mkt. São 4 anos de mercado, desde quando iniciei minha transição de carreira.</p>
         <p>Já cuidei de contas nas áreas de <strong>educação e saúde</strong> — e hoje estou aqui para levar o seu negócio para onde ele merece estar no digital.</p>
         <p>Minha missão é simples: criar conteúdo com <strong>intenção real</strong>, não apenas presença. Cada estratégia é única, construída para o seu contexto e seus objetivos.</p>
-      </div>
-      <div class="sobre-stats reveal">
-        <div class="s-stat">
-          <div class="s-stat-val">4+</div>
-          <div class="s-stat-lbl">Anos de experiência no mercado digital</div>
-        </div>
-        <div class="s-stat">
-          <div class="s-stat-val">+134%</div>
-          <div class="s-stat-lbl">Crescimento de interações para clientes</div>
-        </div>
-        <div class="s-stat">
-          <div class="s-stat-val">+72%</div>
-          <div class="s-stat-lbl">Aumento de alcance orgânico comprovado</div>
-        </div>
-        <div class="s-stat">
-          <div class="s-stat-val">Edu & Saúde</div>
-          <div class="s-stat-lbl">Segmentos com expertise comprovada</div>
+        <div class="sobre-stats">
+          <div class="s-stat">
+            <div class="s-stat-val">4+</div>
+            <div class="s-stat-lbl">Anos de experiência no mercado digital</div>
+          </div>
+          <div class="s-stat">
+            <div class="s-stat-val">+134%</div>
+            <div class="s-stat-lbl">Crescimento de interações para clientes</div>
+          </div>
+          <div class="s-stat">
+            <div class="s-stat-val">+72%</div>
+            <div class="s-stat-lbl">Aumento de alcance orgânico comprovado</div>
+          </div>
+          <div class="s-stat">
+            <div class="s-stat-val">Edu & Saúde</div>
+            <div class="s-stat-lbl">Segmentos com expertise comprovada</div>
+          </div>
         </div>
       </div>
     </div>
@@ -755,18 +786,6 @@
     entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('visible'); });
   }, { threshold: 0.08 });
   document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
-</script>
-<script src="https://identity.netlify.com/v1/netlify-identity-widget.js"></script>
-<script>
-  if (window.netlifyIdentity) {
-    window.netlifyIdentity.on("init", user => {
-      if (!user) {
-        window.netlifyIdentity.on("login", () => {
-          document.location.href = "/admin/";
-        });
-      }
-    });
-  }
 </script>
 </body>
 </html>
