@@ -10,20 +10,15 @@ collections:
     label: "Posts do Blog"
     folder: "posts"
     create: true
-    slug: "{{year}}-{{month}}-{{day}}-{{slug}}"
+    slug: "{{slug}}"
     fields:
       - { label: "Título", name: "title", widget: "string" }
-      - { label: "Data", name: "date", widget: "datetime" }
+      - { label: "Data", name: "date", widget: "datetime", format: "YYYY-MM-DD" }
       - label: "Categoria"
         name: "categoria"
         widget: "select"
-        options:
-          - "Estratégia"
-          - "Conteúdo"
-          - "Anúncios"
-          - "Marca Pessoal"
-          - "Métricas"
+        options: ["Estratégia", "Conteúdo", "Anúncios", "Marca Pessoal", "Métricas"]
       - { label: "Resumo", name: "resumo", widget: "text" }
-      - { label: "Imagem de capa", name: "capa", widget: "image", required: false }
+      - { label: "Imagem de Capa", name: "capa", widget: "image", required: false }
       - { label: "Conteúdo", name: "body", widget: "markdown" }
-      - { label: "Publicado?", name: "publicado", widget: "boolean", default: true }
+      - { label: "Publicado", name: "publicado", widget: "boolean", default: true }
